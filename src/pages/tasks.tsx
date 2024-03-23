@@ -9,11 +9,26 @@ function TasksPage() {
       <h1 className="text-6xl text-gray-800 dark:text-slate-200 font-extrabold">Top3</h1>
 
       <div className="space-y-4">
-        <TopTask task={useTasksHook.tasks?.[0]} onSave />
+        <TopTask
+          task={useTasksHook.tasks?.[0]}
+          saveTask={(newTask) => useTasksHook.saveTask(newTask, 0)}
+          placeholder="Urgent to accomplish"
+          completeTask={() => useTasksHook.completeTask(0)}
+        />
 
-        <TopTask />
+        <TopTask
+          task={useTasksHook.tasks?.[1]}
+          saveTask={(newTask) => useTasksHook.saveTask(newTask, 1)}
+          placeholder="Pretty important to do"
+          completeTask={() => useTasksHook.completeTask(0)}
+        />
 
-        <TopTask />
+        <TopTask
+          task={useTasksHook.tasks?.[2]}
+          saveTask={(newTask) => useTasksHook.saveTask(newTask, 2)}
+          placeholder="Awesome if I do this"
+          completeTask={() => useTasksHook.completeTask(0)}
+        />
       </div>
     </div>
   )

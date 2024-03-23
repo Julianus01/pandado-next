@@ -1,31 +1,30 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Task } from './tasks/useTasks'
 
 interface Props {
   task?: Task
+  saveTask: (task: Task) => void
+  completeTask: () => void
+  placeholder: string
 }
 
 function TopTask(props: Props) {
   const [task, setTask] = useState<Task>(props.task || { title: '' })
 
-  const canMarkAsDone = !!props.task
+  useEffect(() => {
+    setTask(props.task || { title: '' })
+  }, [props.task])
 
   function onKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
     if (event.key === 'Enter') {
-      saveTask()
-    }
-  }
-
-  function saveTask() {
-    if (task.title.length) {
-      console.log('save task')
+      props.saveTask(task)
     }
   }
 
   return (
     <div
       onKeyDown={onKeyDown}
-      onBlur={saveTask}
+      onBlur={() => props.saveTask(task)}
       className="w-full font-light bg-white focus:ring-offset-0 ring-2 ring-transparent focus:ring-slate-200
         shadow-sm rounded-lg dark:bg-slate-800 flex overflow-hidden dark:focus-within:ring-slate-700"
     >
@@ -34,11 +33,14 @@ function TopTask(props: Props) {
         onChange={(event) => setTask({ title: event.target.value })}
         className="flex-1 h-full p-6 pr-3 bg-transparent appearance-none outline-none text-lg text-slate-200"
         type="text"
-        placeholder="Name your task"
+        placeholder={props.placeholder}
       />
 
-      {canMarkAsDone && (
-        <div className="flex items-center pr-5 pl-2 cursor-pointer group">
+      {!!task.title && (
+        <div
+          onClick={props.completeTask}
+          className="flex items-center pr-5 pl-2 cursor-pointer group"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
